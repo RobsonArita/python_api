@@ -34,6 +34,7 @@ def delete_user(user_id: str) -> bool:
 
 def update_user(user_id: str, user: UserUpdate) -> Optional[UserUpdate]:
     user_data = user.model_dump()
+    user_data["updatedAt"] = datetime.now()
     result = users_collection.update_one(
         {"_id": user_id},
         {"$set": user_data}

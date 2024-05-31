@@ -26,9 +26,12 @@ def read_user(user_id: str):
 
 @router.put("/{user_id}", response_model=UserUpdate)
 def update_user_api(user_id: str, user: UserUpdate):
+    exists_user = get_user(user_id)
+    if not exists_user:
+        raise HTTPException(status_code=404, detail="User not found")
     db_user = update_user(user_id, user)
     if not db_user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=400, detail="Error updating user")
     return db_user
 
 @router.delete("/{user_id}", response_model=UserDelete)
